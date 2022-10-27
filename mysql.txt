@@ -1,0 +1,16 @@
+create table postac (id_postaci integer primary key not null, nazwa varchar(40), rodzaj enum('wiking','ptak','kobita'), data_ur date, wiek integer unsigned);
+
+alter table postac modify id_postaci int auto_increment;
+
+insert into postac (nazwa,rodzaj,data_ur,wiek)  values('Bjorn','wiking','0034.03.13',37);
+
+insert into postac (nazwa,rodzaj,data_ur,wiek)  values('Drozd','ptak','1940.10.02',7);
+
+insert into postac (nazwa,rodzaj,data_ur,wiek)  value('Tesciowa','kobita','1900.01.01',100000000);
+
+update postac set wiek = 888 where nazwa = 'Tesciowa';
+
+create table walizka (id_walizki integer auto_increment primary key not null,pojemnosc integer unsigned,kolor enum('rozowy','czerwony','tenczowy','zolty'),id_wlasciciela integer,foreign key(id_wlasciciela) references postac(id_postaci) on delete cascade);
+
+update walizka set kolor = 'rozowy';
+
