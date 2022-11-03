@@ -1,16 +1,80 @@
-create table postac (id_postaci integer primary key not null, nazwa varchar(40), rodzaj enum('wiking','ptak','kobita'), data_ur date, wiek integer unsigned);
+CREATE TABLE postac(
+id_postaci INT AUTO_INCREMENT PRIMARY KEY,
+nazwa VARCHAR(40),
+rodzaj ENUM('wiking','ptak','kobieta'),
+data_ur DATE,
+wiek INT UNSIGNED);
 
-alter table postac modify id_postaci int auto_increment;
+INSERT INTO postac VALUES
+('1','Bjorn','wiking','1984-08-23','38'),
+('2','Drozd','ptak','2005-07-21','17'),
+('3','Tesciowa','kobieta','1955-05-15','67');
 
-insert into postac (nazwa,rodzaj,data_ur,wiek)  values('Bjorn','wiking','0034.03.13',37);
+UPDATE postac SET wiek = 88 WHERE nazwa = 'Tesciowa';
 
-insert into postac (nazwa,rodzaj,data_ur,wiek)  values('Drozd','ptak','1940.10.02',7);
+UPDATE postac SET data_ur = '1934-05-15' WHERE nazwa = 'Tesciowa';
 
-insert into postac (nazwa,rodzaj,data_ur,wiek)  value('Tesciowa','kobita','1900.01.01',100000000);
+CREATE TABLE walizka
+(id_walizki INT AUTO_INCREMENT PRIMARY KEY,
+pojemnosc INT UNSIGNED,
+kolor ENUM('rozowy','czerwony','teczowy','zolty'),
+id_wlasciciela INT,
+FOREIGN KEY(id_wlasciciela) REFERENCES postac(id_postaci) ON DELETE CASCADE);
 
-update postac set wiek = 888 where nazwa = 'Tesciowa';
+ALTER TABLE walizka MODIFY kolor ENUM('rozowy','czerwony','teczowy','zolty') DEFAULT 'rozowy';
 
-create table walizka (id_walizki integer auto_increment primary key not null,pojemnosc integer unsigned,kolor enum('rozowy','czerwony','tenczowy','zolty'),id_wlasciciela integer,foreign key(id_wlasciciela) references postac(id_postaci) on delete cascade);
+INSERT INTO walizka VALUES
+('1','20',DEFAULT,'2'),
+('2','30',DEFAULT,'3');
 
-update walizka set kolor = 'rozowy';
+CREATE TABLE izba(
+adres_budynku INT AUTO_INCREMENT,
+nazwa_izby VARCHAR(40),
+metraz INT UNSIGNED,
+wlasciciel INT,
+PRIMARY KEY(adres_budynku,nazwa_izby),
+FOREIGN KEY(wlasciciel) REFERENCES postac(id_postaci) ON DELETE SET NULL);
+
+ALTER TABLE izba ADD COLUMN kolor_izby VARCHAR(20) DEFAULT 'czarny' AFTER metraz;
+
+INSERT INTO izba VALUES ('1','spizarnia','8',DEFAULT,'1');
+
+CREATE TABLE przetwory(
+id_przetworu INT AUTO_INCREMENT PRIMARY KEY,
+rok_produkcji YEAR DEFAULT (1654),
+id_wykonawcy INT,
+zawartosc VARCHAR(50),
+dodatek VARCHAR(50) DEFAULT 'papryczka chilli',
+id_konsumenta INT,
+FOREIGN KEY(id_wykonawcy) REFERENCES postac(id_postaci),
+FOREIGN KEY(id_konsumenta) REFERENCES postac(id_postaci)
+);
+
+INSERT INTO przetwory (id_przetworu,rok_produkcji,zawartosc) VALUES (1,1939,'bigos')
+
+insert into postac(nazwa) values ('wiking_1');
+insert into postac(nazwa) values ('wiking_2');
+insert into postac(nazwa) values ('wiking_3');
+insert into postac(nazwa) values ('wiking_4');
+insert into postac(nazwa) values ('wiking_5');
+
+create table statek(
+nazwa_statku varchar(130) primary key, 
+typ_statku enum('kanonierka','szkuner','bryg','fregata','liniowiec'),
+data_wodowania date,
+max_ladownosc integer);
+
+alter table statek modify max_ladownosc integer unsigned;
+
+insert into statek(nazwa_statku) values ('stateczek');
+insert into statek(nazwa_statku) values ('statek');
+insert into statek(nazwa_statku) values ('lajba');
+insert into statek(nazwa_statku) values ('krypa');
+
+alter table postac add column funkcja varchar(20) after rodzaj;
+update postac set funkcja = 'kapitan' where nazwa = 'Bjorn';
+
+ALTER TABLE postac add column statek varchar(40);
+ALTER TABLE postac ADD CONSTRAINT postac_nazwaFK FOREIGN KEY (statek) REFERENCES statek(nazwa_statku);
+
 
