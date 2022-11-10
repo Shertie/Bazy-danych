@@ -77,4 +77,16 @@ update postac set funkcja = 'kapitan' where nazwa = 'Bjorn';
 ALTER TABLE postac add column statek varchar(40);
 ALTER TABLE postac ADD CONSTRAINT postac_nazwaFK FOREIGN KEY (statek) REFERENCES statek(nazwa_statku);
 
+update postac set statek = 'krypa' where nazwa = 'Drozd';
+update postac set rodzaj = 'wiking' where id_postaci = 4;
+update postac set rodzaj = 'wiking' where id_postaci = 5;
+update postac set rodzaj = 'wiking' where id_postaci = 6;
+update postac set rodzaj = 'wiking' where id_postaci = 7;
+update postac set rodzaj = 'wiking' where id_postaci = 8;
+
+update postac set statek = 'lajba' where rodzaj = 'wiking';
+delete from izba where nazwa_izby = 'spizarnia';
+drop table izba;
+
+
 
